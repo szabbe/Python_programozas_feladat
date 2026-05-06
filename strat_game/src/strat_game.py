@@ -263,7 +263,7 @@ for epulet in epuletek_pattern.keys():
 if jatekos_szam_int == "1":
     
     #egyjátékos
-    print("még nincs")
+    print("még nincs") #TODO még nem működő funkció
     for kor in range(aktualis_kor+1,korok+1):
         #print(console_clean) TODO
         print("A "+str(kor)+". kör következik")
