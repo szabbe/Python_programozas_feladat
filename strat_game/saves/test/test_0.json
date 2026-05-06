@@ -1,0 +1,22 @@
+{
+    "test1": {
+        "arany": 10,
+        "fa": 5,
+        "ko": 5,
+        "vas": 5,
+        "epuletek": {
+            "Fureszmalom": 0,
+            "Erdo": 0
+        }
+    },
+    "test2": {
+        "arany": 10,
+        "fa": 5,
+        "ko": 5,
+        "vas": 5,
+        "epuletek": {
+            "Fureszmalom": 0,
+            "Erdo": 0
+        }
+    }
+}

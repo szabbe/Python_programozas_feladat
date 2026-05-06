@@ -1,0 +1,20 @@
+{
+  "Fureszmalom": {
+    "Ar": {"Arany": 3, "Fa": 5, "Ko": 3, "Vas": 3},
+    "Termeles": {
+      "Arany": {"type": "const", "value": 0},
+      "Fa": {"type": "formula", "expr": "5 + 2 * epuletek['Erdo']", "string": "5 + 2 * Erdok szama"},
+      "Ko": {"type": "const", "value": 0},
+      "Vas": {"type": "const", "value": 0}
+    }
+  },
+  "Erdo": {
+    "Ar": {"Arany": 0, "Fa": 0, "Ko": 0, "Vas": 0},
+    "Termeles": {
+      "Arany": {"type": "const", "value": 0},
+      "Fa": {"type": "const", "value": 0},
+      "Ko": {"type": "const", "value": 0},
+      "Vas": {"type": "const", "value": 0}
+    }
+  }
+}
