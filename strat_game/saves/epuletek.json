@@ -16,5 +16,172 @@
       "Ko": {"type": "const", "value": 0},
       "Vas": {"type": "const", "value": 0}
     }
+  },
+  "Banya": {
+    "Ar": {
+      "Arany": 2,
+      "Fa": 2,
+      "Ko": 4,
+      "Vas": 1
+    },
+    "Termeles": {
+      "Arany": {
+        "type": "const",
+        "value": 0
+      },
+      "Fa": {
+        "type": "const",
+        "value": 0
+      },
+      "Ko": {
+        "type": "formula",
+        "expr": "6 + epuletek['Kovacsmuhely']",
+        "string": "6 + Kovacsmuhelyek szama"
+      },
+      "Vas": {
+        "type": "formula",
+        "expr": "2 + epuletek['Banya']",
+        "string": "2 + Banyak szama"
+      }
+    }
+  },
+
+  "Kovacsmuhely": {
+    "Ar": {
+      "Arany": 4,
+      "Fa": 6,
+      "Ko": 5,
+      "Vas": 5
+    },
+    "Termeles": {
+      "Arany": {
+        "type": "const",
+        "value": 0
+      },
+      "Fa": {
+        "type": "const",
+        "value": 0
+      },
+      "Ko": {
+        "type": "const",
+        "value": 0
+      },
+      "Vas": {
+        "type": "formula",
+        "expr": "4 + 2 * epuletek['Banya']",
+        "string": "4 + 2 * Banyak szama"
+      }
+    }
+  },
+
+  "Aranybanya": {
+    "Ar": {
+      "Arany": 5,
+      "Fa": 3,
+      "Ko": 4,
+      "Vas": 2
+    },
+    "Termeles": {
+      "Arany": {
+        "type": "formula",
+        "expr": "3 + epuletek['Piac'] * 2",
+        "string": "3 + 2 * Piacok szama"
+      },
+      "Fa": {
+        "type": "const",
+        "value": 0
+      },
+      "Ko": {
+        "type": "const",
+        "value": 0
+      },
+      "Vas": {
+        "type": "const",
+        "value": 0
+      }
+    }
+  },
+
+  "Piac": {
+    "Ar": {
+      "Arany": 3,
+      "Fa": 5,
+      "Ko": 2,
+      "Vas": 1
+    },
+    "Termeles": {
+      "Arany": {
+        "type": "formula",
+        "expr": "2 + epuletek['Lakohaz']",
+        "string": "2 + Lakohazak szama"
+      },
+      "Fa": {
+        "type": "const",
+        "value": 0
+      },
+      "Ko": {
+        "type": "const",
+        "value": 0
+      },
+      "Vas": {
+        "type": "const",
+        "value": 0
+      }
+    }
+  },
+
+  "Lakohaz": {
+    "Ar": {
+      "Arany": 1,
+      "Fa": 3,
+      "Ko": 1,
+      "Vas": 1
+    },
+    "Termeles": {
+      "Arany": {
+        "type": "const",
+        "value": 1
+      },
+      "Fa": {
+        "type": "const",
+        "value": 0
+      },
+      "Ko": {
+        "type": "const",
+        "value": 0
+      },
+      "Vas": {
+        "type": "const",
+        "value": 0
+      }
+    }
+  },
+
+  "Farm": {
+    "Ar": {
+      "Arany": 2,
+      "Fa": 4,
+      "Ko": 1,
+      "Vas": 0
+    },
+    "Termeles": {
+      "Arany": {
+        "type": "const",
+        "value": 0
+      },
+      "Fa": {
+        "type": "formula",
+        "expr": "3 + epuletek['Erdo']",
+        "string": "3 + Erdok szama"
+      },
+      "Ko": {
+        "type": "const",
+        "value": 0
+      },
+      "Vas": {
+        "type": "const",
+        "value": 0
+      }
+    }
   }
 }

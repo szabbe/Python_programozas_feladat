@@ -6,6 +6,7 @@ import os
 import json
 import random 
 import re
+import copy 
 
 #elérési út
 root = Path(__file__).parent.parent
@@ -46,51 +47,32 @@ class Jatekos:
             self.arany -= self.licit
 
     def termeles(self):
+        print("Termelés: "+self.nev)
         epuletek = self.epuletek
-        print("Termelés kezdete")
-        print(self.epuletek.keys())
         for epulet in self.epuletek.keys():
-            print(epulet)
             szamitas_mod = epuletek_pattern[epulet]["Termeles"]["Arany"]["type"]
             if szamitas_mod == "const":
                 self.arany += epuletek_pattern[epulet]["Termeles"]["Arany"]["value"]*self.epuletek[epulet]
-                print('Arany konstanssal változik:')
-                print(epuletek_pattern[epulet]["Termeles"]["Arany"]["value"])
             elif szamitas_mod == "formula":
                 self.arany += eval(epuletek_pattern[epulet]["Termeles"]["Arany"]["expr"])*self.epuletek[epulet]
-                print('Arany változik:')
-                print(epuletek_pattern[epulet]["Termeles"]["Arany"]["expr"])
 
             szamitas_mod = epuletek_pattern[epulet]["Termeles"]["Fa"]["type"]
             if szamitas_mod == "const":
                 self.fa += epuletek_pattern[epulet]["Termeles"]["Fa"]["value"]*self.epuletek[epulet]
-                print('Fa konstanssal változik:')
-                print(epuletek_pattern[epulet]["Termeles"]["Fa"]["value"])
             elif szamitas_mod == "formula":
                 self.fa += eval(epuletek_pattern[epulet]["Termeles"]["Fa"]["expr"])*self.epuletek[epulet]
-                print('Fa változik:')
-                print(epuletek_pattern[epulet]["Termeles"]["Fa"]["expr"])
 
             szamitas_mod = epuletek_pattern[epulet]["Termeles"]["Ko"]["type"]
             if szamitas_mod == "const":
                 self.ko += epuletek_pattern[epulet]["Termeles"]["Ko"]["value"]*self.epuletek[epulet]
-                print('Ko konstanssal változik:')
-                print(epuletek_pattern[epulet]["Termeles"]["Ko"]["value"])
             elif szamitas_mod == "formula":
                 self.ko += eval(epuletek_pattern[epulet]["Termeles"]["Ko"]["expr"])*self.epuletek[epulet]
-                print('Ko változik:')
-                print(epuletek_pattern[epulet]["Termeles"]["Ko"]["expr"])
 
             szamitas_mod = epuletek_pattern[epulet]["Termeles"]["Vas"]["type"]
             if szamitas_mod == "const":
                 self.vas += epuletek_pattern[epulet]["Termeles"]["Vas"]["value"]*self.epuletek[epulet]
-                print('Vas konstanssal változik:')
-                print(epuletek_pattern[epulet]["Termeles"]["Vas"]["value"])
             elif szamitas_mod == "formula":
                 self.vas += eval(epuletek_pattern[epulet]["Termeles"]["Vas"]["expr"])*self.epuletek[epulet]
-                print('Vas változik:')
-                print(epuletek_pattern[epulet]["Termeles"]["Vas"]["expr"])
-            print("-------")
 
     def megveheti_epulet(self,epulet):
         if (self.arany >= epuletek_pattern[epulet]["Ar"]["Arany"]) and (self.fa >= epuletek_pattern[epulet]["Ar"]["Fa"]) and (self.ko >= epuletek_pattern[epulet]["Ar"]["Ko"]) and (self.vas > epuletek_pattern[epulet]["Ar"]["Vas"]):
@@ -104,7 +86,7 @@ class Jatekos:
         self.ko -= epuletek_pattern[epulet]["Ar"]["Ko"]
         self.vas -= epuletek_pattern[epulet]["Ar"]["Vas"]
         self.epuletek[epulet] += 1
-        print("Sikeres épület vásárlás")
+        print("Sikeres épület vásárlás:"+self.nev+" megvette "+epulet)
 
     def epulet_refund(self,epulet):
         self.arany += epuletek_pattern[epulet]["Ar"]["Arany"]
@@ -156,13 +138,14 @@ def mentes():
     print("Mentés")
     kovkor_fajlnev_json = fajlnev +"_"+ str(kor) + ".json"
     kovkor_fajl_path = mappa_path / kovkor_fajlnev_json
-    Path(kovkor_fajlnev_json).touch()
+    Path(kovkor_fajl_path).touch()
     for jatekos in jatekosok.keys():
         jatek_mentes_Dict[jatekos]["arany"] = jatekosok[jatekos].arany
         jatek_mentes_Dict[jatekos]["fa"] = jatekosok[jatekos].fa
         jatek_mentes_Dict[jatekos]["ko"] = jatekosok[jatekos].ko
         jatek_mentes_Dict[jatekos]["vas"] = jatekosok[jatekos].vas
         jatek_mentes_Dict[jatekos]["epuletek"] = jatekosok[jatekos].epuletek
+    print(jatek_mentes_Dict)
     with open(kovkor_fajl_path, "w", encoding="utf-8") as f:
         json.dump(jatek_mentes_Dict, f, ensure_ascii=False, indent=4)
         print("Mentés kész")
@@ -221,7 +204,7 @@ if jatekkezdes == "új": #új játék kezdésénél adatok beolvasása objektumb
             else:
                 valid_jatekos_nev = True
         
-        jatek_mentes_Dict[jatekos_nev] = pattern_Dict["jatekos"]
+        jatek_mentes_Dict[jatekos_nev] = copy.deepcopy(pattern_Dict["jatekos"])
         for epulet in epuletek_pattern.keys():
             jatek_mentes_Dict[jatekos_nev]["epuletek"][epulet] = 0
         jatekosok[jatekos_nev] = Jatekos(jatekos_nev,jatek_mentes_Dict[jatekos_nev]["arany"],jatek_mentes_Dict[jatekos_nev]["fa"],jatek_mentes_Dict[jatekos_nev]["ko"],jatek_mentes_Dict[jatekos_nev]["vas"],jatek_mentes_Dict[jatekos_nev]["epuletek"])
@@ -229,8 +212,6 @@ if jatekkezdes == "új": #új játék kezdésénél adatok beolvasása objektumb
     with open(fajl_path, "w", encoding="utf-8") as f:
         json.dump(jatek_mentes_Dict, f, ensure_ascii=False, indent=4)
 
-    print(jatekos_szam_int)
-    print(aktualis_kor)
 else: #mentett játék beolvasása objektumba
     with open(fajl_path) as f:
         jatek_mentes_Dict = json.load(f)
@@ -238,39 +219,20 @@ else: #mentett játék beolvasása objektumba
     for jatekos_nev in jatek_mentes_Dict.keys():
         jatekosok[jatekos_nev] = Jatekos(jatekos_nev,jatek_mentes_Dict[jatekos_nev]["arany"],jatek_mentes_Dict[jatekos_nev]["fa"],jatek_mentes_Dict[jatekos_nev]["ko"],jatek_mentes_Dict[jatekos_nev]["vas"],jatek_mentes_Dict[jatekos_nev]["epuletek"])
         jatekos_szam_int += 1
-    print(jatekos_szam_int)
-    print(aktualis_kor)
-"""
-jatekosok = {}
-jatekosok["test"] = Jatekos("test",5,5,5,5)
-jatekosok["test2"] = Jatekos("test2",5,5,5,5)
-jatekosok["test3"] = Jatekos("test3",5,5,5,5)
-
-for key in epuletek_pattern.keys():
-    jatekosok["test"].epuletek[key] = 0
-
-if jatekosok["test"].megveheti_epulet("Fureszmalom"):
-    jatekosok["test"].epulet_vasarlas("Fureszmalom")
-
-for jatekos in jatekosok.keys():
-    print(jatekosok[jatekos].nev)
-    print(jatek_mentes_Dict[jatekos])
-"""
 
 felhozatal = [] #játékban lévő épületek
 for epulet in epuletek_pattern.keys():
     felhozatal.append(epulet)
-if jatekos_szam_int == "1":
-    
+
+if jatekos_szam_int == 1: 
     #egyjátékos
-    print("még nincs") #TODO még nem működő funkció
     for kor in range(aktualis_kor+1,korok+1):
-        #print(console_clean) TODO
-        print("A "+str(kor)+". kör következik")
-        jatekos = jatekosok.keys()[0]
+        print(console_clean)
+        input("A "+str(kor)+". kör következik (üss entert)")
+        jatekos = list(jatekosok.keys())[0]
 
         #licit
-        #print(console_clean) TODO
+        print(console_clean)
 
         valid_kor = False
         while valid_kor == False:
@@ -367,8 +329,8 @@ if jatekos_szam_int == "1":
 else:
     #többjátékos
     for kor in range(aktualis_kor+1,korok+1):
-        #print(console_clean) TODO
-        print("A "+str(kor)+". kör következik")
+        print(console_clean)
+        input("A "+str(kor)+". kör következik (üss entert)")
         epulet_kinalat = []
         for sorszam in range(int(jatekos_szam_int)+1):
             epulet = random.choice(felhozatal)
@@ -376,8 +338,8 @@ else:
         
         #licit
         for jatekos in jatekosok.keys():
-            #print(console_clean) TODO
-            print(str(jatekos)+" játékos következik!")
+            print(console_clean)
+            input(str(jatekos)+" játékos következik! (üss entert)")
 
             valid_kor = False
             while valid_kor == False:
@@ -428,7 +390,7 @@ else:
         #épület draftolás
         for jatekos_tuple in sorrend:
             jatekos = jatekos_tuple[0]
-            #print(console_clean) TODO
+            print(console_clean)
             print(str(jatekos)+" játékos következik!")
 
             valid_kor = False
@@ -483,19 +445,22 @@ else:
                 else:
                     print("Rossz input, vagy vegyél ki épületet, hogy tovább léphessen a kör!")
             jatekosok[jatekos].termeles()
-
         #jatekállás kimentése
         mentes()
 
 #scores
-pontszamok = []
-for jatekos in jatekosok.keys():
-    pontszamok.append((jatekosok[jatekos].nev,jatekosok[jatekos].arany))
-pontszamok.sort(key=lambda x:x[1], reverse=True)
-helyezes = 1
-for jatekos_tuple in pontszamok:
-    print("Az"+str(helyezes)+". helyezett: "+jatekos_tuple[0]+", "+jatekos_tuple[1]+" darab arannyal")
-    helyezes += 1
+if jatekos_szam_int == 1:
+    for jatekos in jatek_mentes_Dict.keys():
+        print("A játéknak vége összesen "+ str(jatekosok[jatekos].arany)+" darab aranyat szereztél.")
+else:
+    pontszamok = []
+    for jatekos in jatekosok.keys():
+        pontszamok.append((jatekosok[jatekos].nev,jatekosok[jatekos].arany))
+    pontszamok.sort(key=lambda x:x[1], reverse=True)
+    helyezes = 1
+    for jatekos_tuple in pontszamok:
+        print("Az "+str(helyezes)+". helyezett: "+str(jatekos_tuple[0])+", "+str(jatekos_tuple[1])+" darab arannyal")
+        helyezes += 1
 
 
 
